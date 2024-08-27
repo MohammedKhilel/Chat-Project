@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @Entity
@@ -30,14 +32,23 @@ public class DirectChat extends Conversation{
     private User user2;
 
 
-    public String getUser1Number(){
-        return this.user1.getPhoneNumber();
+    public Map<String,String> getUser1Data(){
+        Map<String,String> userData = new HashMap<>(Map.of());
+        userData.put("PhoneNumber",user1.getPhoneNumber());
+        userData.put("photoUrl",user1.getPersonalPhotoUrl());
+        userData.put("Status",user1.getStatus());
+        userData.put("name",user1.getName());
+        return userData;
     }
 
-    public String getUser2Number(){
-        return this.user2.getPhoneNumber();
+    public Map<String,String> getUser2Data() {
+        Map<String, String> userData = new HashMap<>(Map.of());
+        userData.put("PhoneNumber", user2.getPhoneNumber());
+        userData.put("photoUrl", user2.getPersonalPhotoUrl());
+        userData.put("Status",user2.getStatus());
+        userData.put("name",user2.getName());
+        return userData;
     }
-
 }
 
 

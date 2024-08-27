@@ -60,6 +60,12 @@ public class ConversationController {
        return conversationService.findById(ConversationId);
     }
 
+    @GetMapping("/getConversationMessages/{id}")
+    @Operation(summary = "get messages for a Conversation by it is id  ")
+    public List<Message> getConversationJoinFetch (@PathVariable("id") int ConversationId){
+        return conversationService.findById(ConversationId).getMessages();
+    }
+
 
     @GetMapping("/getConversationsForUser")
     @Operation(summary = "get All the Conversations For specific User by his phone number")

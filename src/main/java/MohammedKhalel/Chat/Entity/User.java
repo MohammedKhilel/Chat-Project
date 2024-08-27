@@ -33,11 +33,7 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "groupchat_id"))
     private List<Groupchat> groupchat;
 
-//    @OneToMany(mappedBy = "user1")
-//    private List<DirectChat> directChat1;
-//
-//    @OneToMany(mappedBy = "user2")
-//    private List<DirectChat> directChat2;
+
 }
 
 
