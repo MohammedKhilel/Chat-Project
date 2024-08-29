@@ -1,6 +1,7 @@
 package MohammedKhalel.Chat.Service;
 
 import MohammedKhalel.Chat.Entity.Conversation;
+import MohammedKhalel.Chat.Entity.User;
 import MohammedKhalel.Chat.Repository.ConversationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,10 @@ public class ConversationService {
         }else {
             throw new RuntimeException("can't find this Conversation id : "+id +" :-)");
         }
+    }
+
+    public void save(Conversation conversation){
+        conversationRepository.save(conversation);
     }
 
 

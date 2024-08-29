@@ -2,6 +2,8 @@ package MohammedKhalel.Chat.Controller;
 
 import MohammedKhalel.Chat.Compositekeys.ParticipantKey;
 import MohammedKhalel.Chat.Entity.*;
+import MohammedKhalel.Chat.Entity.Enum.ConversationType;
+import MohammedKhalel.Chat.Entity.Enum.GroupRoles;
 import MohammedKhalel.Chat.Service.*;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -23,24 +25,26 @@ public class ConversationController {
     private final ConversationService conversationService;
 
     public record GroupChatRequest(String name, String firstUserPhone) {
-        // No need to write getters, equals, hashCode, or toString methods!
     }
-
-    public record DirectChatRequest(String userNumber1, String userNumber2) {
-        // No need to write getters, equals, hashCode, or toString methods!
+    public record DirectChatRequest(String userPhone1, String userPhone2) {
+    }
+    public record AddMemberRequest(String userPhone, int groupChatId) {
+    }
+    public record sendMessageRequest(String userPhone, int ConversationId,String content,String status,
+                                     String attachmentUrl,String attachmentType) {
     }
 
     @PostMapping("/addGroupchat")
     @Operation(summary = "add new Group chat by name and first user phone")
     public void addGroupchat ( @RequestBody GroupChatRequest newGroupChat){
         Groupchat groupchat = new Groupchat();
-        groupchat.setType("Groupchat");
+        groupchat.setType(ConversationType.GroupChat);
         groupchat.setName(newGroupChat.name());
         groupChatService.save(groupchat);
         User firstUser = userService.findUserByPhoneNumber(newGroupChat.firstUserPhone());
         Participant participant = new Participant();
         participant.setParticipantKey(new ParticipantKey(firstUser,groupchat));
-        participant.setRole("Admin");
+        participant.setRole(GroupRoles.Admin);
         participantService.save(participant);
     }
 
@@ -48,9 +52,9 @@ public class ConversationController {
     @Operation(summary = "add new Direct Chat userNumber1 and userNumber2")
     private void addDirectChat (@RequestBody DirectChatRequest directChatUsersNumber ){
         DirectChat directChat = new DirectChat();
-        directChat.setUser1(userService.findUserByPhoneNumber(directChatUsersNumber.userNumber1()));
-        directChat.setUser2(userService.findUserByPhoneNumber(directChatUsersNumber.userNumber2()));
-        directChat.setType("DirectChat");
+        directChat.setUser1(userService.findUserByPhoneNumber(directChatUsersNumber.userPhone1()));
+        directChat.setUser2(userService.findUserByPhoneNumber(directChatUsersNumber.userPhone2()));
+        directChat.setType(ConversationType.DirectChat);
         directChatService.save(directChat);
     }
 
@@ -80,6 +84,36 @@ public class ConversationController {
         allConversations.addAll(groupchats);
 
         return allConversations;
+    }
+
+    @PostMapping("/addGroupMember")
+    @Operation(summary = "add new member for a specific group chat")
+    public void addGroupMember (@RequestBody AddMemberRequest memberRequest){
+
+        User theUser = userService.findUserByPhoneNumber(memberRequest.userPhone());
+        Groupchat theGroupchat = groupChatService.getGroupchatById(memberRequest.groupChatId());
+        Participant theParticipant = new Participant();
+        theParticipant.setParticipantKey(new ParticipantKey(theUser,theGroupchat));
+        theParticipant.setRole(GroupRoles.Member);
+        participantService.save(theParticipant);
+    }
+
+    @PostMapping("/sendMessage")
+    @Operation(summary = "send a new message in a specific conversation by a specific user")
+    public void sendMessage (@RequestBody sendMessageRequest newMessage){
+        User theSender = userService.findUserByPhoneNumber(newMessage.userPhone());
+        Conversation theConversation = conversationService.findById(newMessage.ConversationId());
+
+        if(getConversationsForUser(theSender.getPhoneNumber()).contains(theConversation)){
+            Message theMessage = new Message(theSender,newMessage.content(),newMessage.status(),
+                    newMessage.attachmentUrl(),newMessage.attachmentType());
+
+            theConversation.AddMessage(theMessage);
+            conversationService.save(theConversation);
+        }else {
+            throw new RuntimeException("this user "+newMessage.userPhone()+" doesn't belong to this conversation "+
+                                         newMessage.ConversationId()+ " :-)");
+        }
     }
 
 }

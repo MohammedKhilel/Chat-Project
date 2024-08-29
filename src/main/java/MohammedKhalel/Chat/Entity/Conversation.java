@@ -1,6 +1,7 @@
 package MohammedKhalel.Chat.Entity;
 
 
+import MohammedKhalel.Chat.Entity.Enum.ConversationType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -25,7 +26,7 @@ public class Conversation {
     @GeneratedValue(strategy =GenerationType.IDENTITY)
     private int id;
 
-    private String type;
+    private ConversationType type;
 
     @CreationTimestamp
     @Column(name = "create_at", nullable = false, updatable = false)
@@ -46,11 +47,11 @@ public class Conversation {
 
     public String getLastMessage(){
         if(!messages.isEmpty()){
-            if(messages.get(messages.size()-1).getType().equals("Text")){
+            if(messages.get(messages.size()-1).getContent()!=null){
                 return messages.get(messages.size()-1).getContent();
             }else{
 
-                return messages.get(messages.size()-1).getType();
+                return messages.get(messages.size()-1).getAttachmentType();
             }}else {
             return "";
         }

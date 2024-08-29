@@ -44,13 +44,20 @@ public class Message {
     @Column(name = "attachment_url", length = 512)
     private String attachmentUrl;
 
-    private String type;
     private String status;
     private String attachmentType;
 
     // Custom getter for user phone number
     public String getUserPhoneNumber() {
         return this.user.getPhoneNumber();
+    }
+
+    public Message (User user,String content,String status,String attachmentUrl,String attachmentType){
+    this.user=user;
+    this.content=content;
+    this.status=status;
+    this.attachmentType=attachmentType;
+    this.attachmentUrl=attachmentUrl;
     }
 
 }

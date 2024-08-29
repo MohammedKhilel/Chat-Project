@@ -1,5 +1,6 @@
 package MohammedKhalel.Chat.Entity;
 
+import MohammedKhalel.Chat.Entity.Enum.GroupRoles;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -29,5 +30,5 @@ public class Participant {
     @Column(name = "join_at", nullable = false, updatable = false)
     private LocalDateTime joinAt;
 
-    private String role;
+    private GroupRoles role;
 }
