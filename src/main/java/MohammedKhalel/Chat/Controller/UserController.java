@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class UserController  {
 
     private final UserService userService;
@@ -38,7 +39,7 @@ public class UserController  {
             return ResponseEntity.ok(userService.UserRequest(request));
         }
     }
-    @PostMapping("/update")
+    @PutMapping("/update")
     @Operation(summary = "update user data")
     public void update (@RequestBody UpdateRequest request){
         userService.update(request.phoneNumber(), request.password(), request.name()
@@ -46,12 +47,13 @@ public class UserController  {
     }
 
 
-    @GetMapping("/getuserbyphone")
+    @PostMapping("/getuserbyphone")
     @Operation(summary = "get user data by his phone number")
     public User getUserByPhone(@RequestBody String phoneNumber){
 
         return userService.findUserByPhoneNumber(phoneNumber);
     }
+
 
 
 }

@@ -1,5 +1,6 @@
 package MohammedKhalel.Chat.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,6 +32,7 @@ public class User implements UserDetails {
     private String status;
 
     @ManyToMany
+    @JsonIgnore
     @JoinTable(
             name = "participant",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -38,11 +40,13 @@ public class User implements UserDetails {
     private List<Groupchat> groupchat;
 
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
     @Override
+    @JsonIgnore
     public String getUsername() {
         return phoneNumber;
     }
