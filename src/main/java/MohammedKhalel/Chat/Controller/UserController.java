@@ -32,11 +32,11 @@ public class UserController  {
 
     @PostMapping("/signup")
     @Operation(summary = "add new user")
-    public ResponseEntity<AuthenticationResponse> signUp(@RequestBody UserRequest request){
+    public ResponseEntity<Object> signUp(@RequestBody UserRequest request){
         if(userService.checkUsedPhone(request.getPhoneNumber())){
             throw new RuntimeException("this phone Number "+request.getPhoneNumber()+" is already Used :-)");
         }else{
-            return ResponseEntity.ok(userService.UserRequest(request));
+            return ResponseEntity.ok(userService.UserRequest(request).getToken());
         }
     }
     @PutMapping("/update")

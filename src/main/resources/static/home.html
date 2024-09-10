@@ -2,11 +2,78 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mohammed Khalil Chat</title>
+    <link href="css/Css.css" rel="stylesheet" type="text/css">
+
 </head>
 <body>
+<div class="navbar">
+    <div class="logo">
+        <h1>Chat</h1>
+    </div>
+    <div class="nav-links">
+        <button class="button" id="aboutBtn" style="font-size: 17px;" >About Us</button>
+        <button class="button" id="signBtn" style="font-size: 17px;"  >Sign</button>
+        <button class="button" id="loginBtn" style="font-size: 17px;" >Login</button>
+    </div>
+</div>
+
+<div class="main" id="home">
+    <h1>Welcome to Mohammed Khalil Chat</h1>
+    <p></p>
+</div>
+
+<div class="footer">
+    <p>&copy; 2024 Mohammed Khalil Chat. All rights reserved.</p>
+</div>
 
 
-<script src="js/homeScript.js" ></script>
+<div id="loginModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Login</h2>
+        <form id="loginForm" >
+            <div class="form-group">
+                <label for="phoneNumber">phone Number</label>
+                <input type="text" id="phoneNumber" name="phoneNumber">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password">
+            </div>
+            <button type="submit" class="button">Login</button>
+        </form>
+    </div>
+</div>
+
+
+<div id="signModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>sign</h2>
+        <form id="signForm" >
+            <div class="form-group">
+                <label for="name">name</label>
+                <input type="text" id="name" name="name">
+            </div>
+            <div class="form-group">
+                <label for="newPhoneNumber">phone Number</label>
+                <input type="text" id="newPhoneNumber" name="phoneNumber">
+            </div>
+            <div class="form-group">
+                <label for="newPassword">Password</label>
+                <input type="password" id="newPassword" name="newPassword">
+            </div>
+            <div class="form-group">
+                <label for="ConfirmPassword">Confirm password</label>
+                <input type="password" id="ConfirmPassword" name="ConfirmPassword">
+            </div>
+            <button type="submit" class="button">sign</button>
+        </form>
+    </div>
+</div>
+
+<script src="js/homeScript.js"></script>
 </body>
 </html>
