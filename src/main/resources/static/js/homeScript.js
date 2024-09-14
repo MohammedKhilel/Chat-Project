@@ -41,6 +41,9 @@ fetch('http://localhost:8080/user/getuserbyphone',{
         if (event.target == signModal) {
                     signModal.style.display = "none";
                 }
+       if (event.target == aboutModal) {
+                   aboutModal.style.display = "none";
+               }
     }
 document.getElementById("loginForm").addEventListener("submit", function(event) {
     event.preventDefault(); // Prevent the default form submission
@@ -58,10 +61,10 @@ document.getElementById("loginForm").addEventListener("submit", function(event) 
             "password": password
         })
     })
-    .then(response => response.text())
-    .then(data => {
-        localStorage.setItem("token",data);
-        localStorage.setItem("phoneNumber", phoneNumber);
+    .then(response => response.ok ? response.text() : Promise.reject("login failed"))
+    .then(token => {
+        localStorage.setItem("token", token);
+        localStorage.setItem("phoneNumber", number);
         location.href="conversations.html";
     })
     .catch(error => {
@@ -105,12 +108,43 @@ document.getElementById("loginForm").addEventListener("submit", function(event) 
         .then(token => {
             localStorage.setItem("token", token);
             localStorage.setItem("phoneNumber", phoneNumber);
-            location.href="/conversations.html";
+            location.href="conversations.html";
         })
         .catch(error => console.error('Error:', error));
     };
 
     // Attach sign-up logic to form submission
     document.getElementById("signModal").addEventListener("submit", handleSignUp);
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//about us
+    var aboutModal = document.getElementById("aboutModal");
+    var aboutBtn = document.getElementById("aboutBtn");
+    var aboutSpan = document.getElementsByClassName("close")[2];
+    // When the user clicks the button, open the modal
+    aboutBtn.onclick = function() {
+        aboutModal.style.display = "block";
+    }
+    // When the user clicks on <span> (x), close the modal
+    aboutSpan.onclick = function() {
+        aboutModal.style.display = "none";
+    }
+    // When the user clicks anywhere outside of the modal, close it
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

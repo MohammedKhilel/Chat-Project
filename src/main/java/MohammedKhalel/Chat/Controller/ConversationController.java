@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/Conversation")
@@ -71,12 +70,25 @@ public class ConversationController {
     }
 
 
-    @GetMapping("/getConversationsForUser")
+    @PostMapping("/getConversationsForUser")
     @Operation(summary = "get All the Conversations For specific User by his phone number")
+    public List<Object> getConversationsForUserObject (@RequestBody String userPhone){
+        User theUser= userService.findUserByPhoneNumber(userPhone);
+
+        List<DirectChatService.DirectChatForUser> directChats =directChatService.getDirectChatByUserId(theUser.getId());
+        List<Groupchat> groupchats = groupChatService.getGroupchatsByUser(theUser);
+
+        List<Object> allConversations = new ArrayList<>();
+        allConversations.addAll(directChats);
+        allConversations.addAll(groupchats);
+
+        return allConversations;
+    }
+
     public List<Conversation> getConversationsForUser (@RequestBody String userPhone){
         User theUser= userService.findUserByPhoneNumber(userPhone);
 
-        List<DirectChat> directChats =directChatService.getDirectChatByUserId(theUser.getId());
+        List<DirectChat> directChats =directChatService.getDirectChatByUser(theUser.getId());
         List<Groupchat> groupchats = groupChatService.getGroupchatsByUser(theUser);
 
         List<Conversation> allConversations = new ArrayList<>();
@@ -85,6 +97,7 @@ public class ConversationController {
 
         return allConversations;
     }
+
 
     @PostMapping("/addGroupMember")
     @Operation(summary = "add new member for a specific group chat")
@@ -104,7 +117,9 @@ public class ConversationController {
         User theSender = userService.findUserByPhoneNumber(newMessage.userPhone());
         Conversation theConversation = conversationService.findById(newMessage.ConversationId());
 
-        if(getConversationsForUser(theSender.getPhoneNumber()).contains(theConversation)){
+
+        if(getConversationsForUser(newMessage.userPhone()).contains(theConversation)){
+
             Message theMessage = new Message(theSender,newMessage.content(),newMessage.status(),
                     newMessage.attachmentUrl(),newMessage.attachmentType());
 

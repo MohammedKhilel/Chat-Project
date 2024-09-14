@@ -2,12 +2,51 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Conversations</title>
-    <link href="css/Css.css" rel="stylesheet" type="text/css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversations Page</title>
+    <link rel="stylesheet" href="css/conversation.css" type="text/css">
 </head>
 <body>
-     <h1>HELLO BooooooooooooY you did it!!!!!</h1>
 
-     <script src="js/conversationsScript.js"></script>
+<!-- Main Container -->
+<div class="container">
+    <!-- Left Panel: Conversations List -->
+    <section class="conversations-panel">
+        <header class="header">
+            <div class="header-left">
+                <img src="https://www.citypng.com/public/uploads/small/11639594342hjraqgbufi3xlb66lt30fz1pwfcydxkjqbynfqdpvufz41ysjtngiet4dyrywgqqqqu56w5nozgrhyecs4ixrlllkl150ogbiid1.png" style="height: 25px; width: 25px" alt="Profile" class="profile-picture">
+                <span class="app-name">MyChat</span>
+            </div>
+            <div class="header-right">
+                <img src="https://www.freeiconspng.com/uploads/search-icon-png-29.png" alt="Search" class="icon">
+                <img src="https://static-00.iconduck.com/assets.00/gear-settings-icon-2048x2041-ad5sr7k6.png" alt="Settings" class="icon">
+            </div>
+        </header>
+
+        <section class="conversations">
+
+        </section>
+    </section>
+
+    <!-- Right Panel: Messages Area -->
+    <section class="messages-panel">
+        <header class="messages-header">
+
+        </header>
+
+        <!-- Messages -->
+        <div class="messages">
+
+        </div>
+
+        <!-- Input Box for New Message -->
+        <div class="message-input">
+            <input type="text" id="messageText" placeholder="Type a message...">
+            <button id="sendBtn">Send</button>
+        </div>
+    </section>
+</div>
+
+<script src="js/conversationsScript.js"></script>
 </body>
 </html>

@@ -1,0 +1,188 @@
+/* Reset some default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* Main Container */
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+/* Left Panel: Conversations */
+.conversations-panel {
+    flex: 1;
+    border-right: 1px solid #ccc;
+    display: flex;
+    flex-direction: column;
+    background-color: #f8f8f8;
+}
+
+/* Header in Conversations Panel */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    color: white;
+    padding: 16px 20px;
+}
+
+.profile-picture {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+
+}
+
+.app-name {
+    font-size: 1.5rem;
+    margin-left: 10px;
+    padding : 0px 0px 5px 0px;
+}
+
+.icon {
+    width: 25px;
+    height: 25px;
+    margin-left: 20px;
+    cursor: pointer;
+
+}
+
+/* Conversations List */
+.conversations {
+    overflow-y: auto;
+    flex-grow: 1;
+    padding: 10px;
+}
+
+.conversation-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #e0e0e0;
+    cursor: pointer;
+}
+
+.conversation-item:hover {
+    background-color: #f1f1f1;
+}
+
+.conversation-profile {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+
+}
+
+.conversation-details {
+    flex: 1;
+    margin-left: 10px;
+}
+
+.conversation-name {
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.conversation-snippet {
+    color: #888;
+    font-size: 0.9rem;
+}
+
+.conversation-meta {
+    text-align: right;
+}
+
+.conversation-time {
+    font-size: 0.8rem;
+    color: #888;
+}
+
+.unread-count {
+    background-color: #25D366;
+    color: white;
+    font-size: 0.9rem;
+    padding: 2px 6px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+/* Right Panel: Messages */
+.messages-panel {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+}
+
+.messages-header {
+    display: flex;
+    align-items: center;
+    background-color: #333;
+    color: white;
+    padding: 12px 20px;
+}
+
+.messages-profile {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.messages-contact-name {
+    font-size: 1.2rem;
+    margin-left: 10px;
+}
+
+/* Messages Area */
+.messages {
+    flex-grow: 1;
+    padding: 10px;
+    overflow-y: auto;
+    background-color: #e5ddd5;
+}
+
+.message {
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 10px;
+    max-width: 60%;
+}
+
+.message.received {
+    background-color: #fff;
+    align-self: flex-start;
+}
+
+.message.sent {
+    background-color: #DCF8C6;
+    align-self: flex-end;
+}
+
+/* Input Box for New Message */
+.message-input {
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid #ccc;
+    background-color: white;
+}
+
+.message-input input {
+    flex-grow: 1;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    padding: 10px;
+    margin-right: 10px;
+}
+
+.message-input button {
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+}
