@@ -23,10 +23,35 @@
             </div>
         </header>
 
-        <section class="conversations">
+        <section class="conversations" id="conversationsSection">
+            <!-- Existing conversation items go here -->
 
         </section>
+        <div id="newDirectChatModal" class="modal">
+            <div class="modal-content">
+                <span id="close" class="close">&times;</span>
+                <h3>Enter the phone number</h3>
+                <form id="new-directChat" >
+                    <div class="form-group">
+                        <input type="text" id="phoneNumber" name="phoneNumber">
+                    </div>
+                    <button type="submit" class="button">add</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="messageModal" class="modal">
+            <div class="modal-content">
+                <span id="close2" class="close">&times;</span>
+                <h3 id ="messageContent"></h3>
+            </div>
+        </div>
+
+        <!-- Add new conversation button -->
+        <button class="new-conversation-btn">+ New Conversation</button>
+
     </section>
+
 
     <!-- Right Panel: Messages Area -->
     <section class="messages-panel">
@@ -35,16 +60,16 @@
         </header>
 
         <!-- Messages -->
-        <div class="messages">
-
-        </div>
+        <div class="messages"></div>
 
         <!-- Input Box for New Message -->
-        <div class="message-input">
+        <div class="message-input hidden">
             <input type="text" id="messageText" placeholder="Type a message...">
             <button id="sendBtn">Send</button>
         </div>
     </section>
+
+
 </div>
 
 <script src="js/conversationsScript.js"></script>

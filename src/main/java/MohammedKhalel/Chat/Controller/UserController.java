@@ -54,6 +54,11 @@ public class UserController  {
         return userService.findUserByPhoneNumber(phoneNumber);
     }
 
+    @PostMapping("/isPhoneUsed")
+    @Operation(summary = "return true if this poone number is alredy used")
+    public boolean isPhoneUsed (@RequestBody String phoneNumber){
 
+        return userService.checkUsedPhone(phoneNumber);
+    }
 
 }

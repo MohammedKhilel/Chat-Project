@@ -1,16 +1,99 @@
 document.addEventListener('DOMContentLoaded', () => {
-
     const sendBtn = document.getElementById('sendBtn');
     const messageText = document.getElementById('messageText');
     const messagesContainer = document.querySelector('.messages');
     const conversationsContainer = document.querySelector('.conversations');
     const messagesHeader = document.querySelector('.messages-header');
+    const messageInputBox = document.querySelector('.message-input');
+    const newConversationBtn = document.querySelector('.new-conversation-btn');
+    const messageContent = document.getElementById('messageContent');
+    const newDirectChatModal = document.getElementById("newDirectChatModal");
+    const messageModal =document.getElementById("messageModal");
+    const span = document.getElementById("close");
+    const span2 = document.getElementById("close2");
     let phoneNumber = localStorage.getItem('phoneNumber');
     let token = localStorage.getItem('token');
     let activeConversation = null;
+    let dropdown = null;
+    let optionsIcon=null;
 
     const API_BASE_URL = 'http://localhost:8080';
     const DEFAULT_PROFILE_PHOTO = 'https://th.bing.com/th/id/OIP.sZRBs2Cab1BGQzZzom61RgHaHa?w=193&h=194&c=7&r=0&o=5&pid=1.7';
+
+    newConversationBtn.onclick = () =>newDirectChatModal.style.display = "block";
+
+    span.onclick = () => newDirectChatModal.style.display = "none";
+
+    span2.onclick = () => messageContent.style.display = "none";
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == newDirectChatModal) {
+            newDirectChatModal.style.display = "none";
+        }
+        if (event.target == messageModal) {
+            messageModal.style.display = "none";
+        }
+         if (dropdown && event.target != optionsIcon && !dropdown.contains(event.target)){
+            dropdown.style.display = "none";
+         }
+        }
+
+    // Submit form to create a new conversation
+    document.getElementById("new-directChat").addEventListener("submit", (event) => {
+        event.preventDefault();
+        const newPhoneNumber = document.getElementById("phoneNumber").value;
+
+        checkPhoneNumber(newPhoneNumber)
+            .then(isPhoneUsed => {
+                if (isPhoneUsed) {
+                    if (newPhoneNumber !== phoneNumber) {
+                        createNewConversation(newPhoneNumber);
+                    } else {
+                        showErrorMessage("You can't speak with yourself :-)");
+                    }
+                } else {
+                    showErrorMessage("This phone number does not have an account.");
+                }
+            });
+           setTimeout(function (){
+            fetchConversations();
+           },100);//after this time
+
+    });
+
+    const checkPhoneNumber = (newPhoneNumber) => {
+        return fetch(`${API_BASE_URL}/user/isPhoneUsed`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/text',
+                'Authorization': `Bearer ${token}`
+            },
+            body: newPhoneNumber
+        }).then(response => response.json());
+    };
+
+    const createNewConversation = (newPhoneNumber) => {
+        fetch(`${API_BASE_URL}/Conversation/addDirectChat`, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                userPhone1: phoneNumber,
+                userPhone2: newPhoneNumber
+            })
+        }).catch(error => console.error('Error:', error));
+
+        newDirectChatModal.style.display = "none";
+    };
+
+    const showErrorMessage = (message) => {
+        newDirectChatModal.style.display = 'none';
+        messageModal.style.display = "block";
+        messageContent.innerText = message;
+    };
 
     // Function to send a message
     const sendMessage = () => {
@@ -30,9 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 userPhone: phoneNumber,
                 ConversationId: activeConversation.id,
                 content: messageContent,
-                status: 'sent',
-                attachmentUrl: null,
-                attachmentType: null
+                status: 'sent'
             })
         }).catch(error => console.error('Error sending message:', error));
 
@@ -70,6 +151,8 @@ document.addEventListener('DOMContentLoaded', () => {
         activeConversation = conversation;
         updateMessagesHeader(conversation);
         fetchMessages(conversation.id);
+        messageInputBox.classList.remove('hidden');
+
     };
 
     // Fetch messages for a specific conversation
@@ -97,8 +180,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         scrollToBottom(messagesContainer);
     };
-
-    // Utility functions
 
     // Create a conversation item
     const createConversationItem = (conversation) => {
@@ -141,11 +222,29 @@ document.addEventListener('DOMContentLoaded', () => {
         messagesHeader.innerHTML = `
             <img src="${profileImageUrl}" alt="Profile" class="messages-profile">
             <span class="messages-contact-name">${isDirectChat ? conversation.OtherUser.name : conversation.name}</span>
+            <img src="https://hypeddit.com/images/option-icon.png" alt="Options" class="options-icon">
+            <div class="dropdown">
+                <ul>
+                    <li id="deleteConversation">Delete this conversation</li>
+                    <li id="addMember" class="hidden">Add member</li>
+                    <li id="aboutConversation">About this conversation</li>
+                </ul>
+            </div>
         `;
+            optionsIcon = document.querySelector(".options-icon");
+            optionsIcon.addEventListener("click",function (){
+                dropdown = document.querySelector(".dropdown");
+                dropdown.style.display = "block";
+                if(!isDirectChat)document.getElementById("addMember").style.display = "block";
+
+
+            });
+
     };
 
     // Scroll to the bottom of the messages container
     const scrollToBottom = (container) => {
+
         container.scrollTop = container.scrollHeight;
     };
 
@@ -154,4 +253,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Event listener for sending messages
     sendBtn.addEventListener('click', sendMessage);
+
+    //setInterval(fetchConversations, 1000); // Refreshes every 2 seconds
+
 });
+
+

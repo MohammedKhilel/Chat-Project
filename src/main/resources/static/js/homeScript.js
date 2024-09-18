@@ -129,22 +129,3 @@ document.getElementById("loginForm").addEventListener("submit", function(event) 
     aboutSpan.onclick = function() {
         aboutModal.style.display = "none";
     }
-    // When the user clicks anywhere outside of the modal, close it
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
