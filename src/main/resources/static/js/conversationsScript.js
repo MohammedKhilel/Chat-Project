@@ -5,7 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const conversationsContainer = document.querySelector('.conversations');
     const messagesHeader = document.querySelector('.messages-header');
     const messageInputBox = document.querySelector('.message-input');
-    const newConversationBtn = document.querySelector('.new-conversation-btn');
+    const newConversationBtn = document.getElementById('newDirectChat');
+    const newGroupChatBtn = document.getElementById('newGroupChat');
     const messageContent = document.getElementById('messageContent');
     const newDirectChatModal = document.getElementById("newDirectChatModal");
     const messageModal =document.getElementById("messageModal");
@@ -21,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const DEFAULT_PROFILE_PHOTO = 'https://th.bing.com/th/id/OIP.sZRBs2Cab1BGQzZzom61RgHaHa?w=193&h=194&c=7&r=0&o=5&pid=1.7';
 
     newConversationBtn.onclick = () =>newDirectChatModal.style.display = "block";
+    newGroupChatBtn.onclick = () =>console.log("hello mother fucker");
 
     span.onclick = () => newDirectChatModal.style.display = "none";
 
@@ -232,14 +234,37 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         `;
             optionsIcon = document.querySelector(".options-icon");
-            optionsIcon.addEventListener("click",function (){
-                dropdown = document.querySelector(".dropdown");
-                dropdown.style.display = "block";
-                if(!isDirectChat)document.getElementById("addMember").style.display = "block";
+            optionsIcon.addEventListener("click",showDropdown);
+            setupDropdownActions(isDirectChat);
+    };
 
+    const showDropdown = () => {
+        dropdown = document.querySelector(".dropdown");
+        dropdown.style.display = "block";
+    };
 
-            });
+    const setupDropdownActions = (isDirectChat) => {
+        const addMemberOption = document.getElementById("addMember");
+        if (!isDirectChat) addMemberOption.style.display = "block";
 
+        document.getElementById("deleteConversation").addEventListener("click", deleteConversation);
+        document.getElementById("addMember").addEventListener("click", addMember);
+        document.getElementById("aboutConversation").addEventListener("click", aboutConversation);
+    };
+
+    const deleteConversation = () => {
+        alert("Delete conversation clicked");
+        // Add your action to delete the conversation here
+    };
+
+    const addMember = () => {
+        alert("Add member clicked");
+        // Add your action to add a member here
+    };
+
+    const aboutConversation = () => {
+        alert("About conversation clicked");
+        // Add your action for about conversation here
     };
 
     // Scroll to the bottom of the messages container
@@ -254,7 +279,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Event listener for sending messages
     sendBtn.addEventListener('click', sendMessage);
 
-    //setInterval(fetchConversations, 1000); // Refreshes every 2 seconds
 
 });
 

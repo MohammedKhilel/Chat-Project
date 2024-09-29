@@ -40,6 +40,20 @@
             </div>
         </div>
 
+        <div id="newGroupChatModal" class="modal">
+            <div class="modal-content">
+                <span id="close3" class="close">&times;</span>
+                <h3>Enter the phone number</h3>
+                <form id="new-groupChat" >
+                    <div class="form-group">
+                        <label for="GroupName"></label>
+                        <input type="text" id="GroupName" name="GroupName">
+                    </div>
+                    <button type="submit" class="button">create</button>
+                </form>
+            </div>
+        </div>
+        
         <div id="messageModal" class="modal">
             <div class="modal-content">
                 <span id="close2" class="close">&times;</span>
@@ -48,8 +62,8 @@
         </div>
 
         <!-- Add new conversation button -->
-        <button class="new-conversation-btn">+ New Conversation</button>
-
+        <button class="new-conversation-btn" id ="newDirectChat">+ New Conversation</button>
+        <button class="new-conversation-btn" id ="newGroupChat">+ New Group Chat</button>
     </section>
 
 
