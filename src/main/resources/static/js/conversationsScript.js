@@ -9,9 +9,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const newGroupChatBtn = document.getElementById('newGroupChat');
     const messageContent = document.getElementById('messageContent');
     const newDirectChatModal = document.getElementById("newDirectChatModal");
+    const newGroupModal = document.getElementById("newGroupChatModal");
     const messageModal =document.getElementById("messageModal");
     const span = document.getElementById("close");
     const span2 = document.getElementById("close2");
+    const span3 = document.getElementById("close3");
     let phoneNumber = localStorage.getItem('phoneNumber');
     let token = localStorage.getItem('token');
     let activeConversation = null;
@@ -22,11 +24,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const DEFAULT_PROFILE_PHOTO = 'https://th.bing.com/th/id/OIP.sZRBs2Cab1BGQzZzom61RgHaHa?w=193&h=194&c=7&r=0&o=5&pid=1.7';
 
     newConversationBtn.onclick = () =>newDirectChatModal.style.display = "block";
-    newGroupChatBtn.onclick = () =>console.log("hello mother fucker");
+    newGroupChatBtn.onclick = () =>newGroupModal.style.display = "block";
 
     span.onclick = () => newDirectChatModal.style.display = "none";
-
     span2.onclick = () => messageContent.style.display = "none";
+    span3.onclick = () => newGroupModal.style.display = "none";
 
     // When the user clicks anywhere outside of the modal, close it
     window.onclick = function(event) {
@@ -34,8 +36,12 @@ document.addEventListener('DOMContentLoaded', () => {
             newDirectChatModal.style.display = "none";
         }
         if (event.target == messageModal) {
-            messageModal.style.display = "none";
+                messageModal.style.display = "none";
+            }
+        if (event.target == newGroupModal) {
+            newGroupModal.style.display = "none";
         }
+
          if (dropdown && event.target != optionsIcon && !dropdown.contains(event.target)){
             dropdown.style.display = "none";
          }
@@ -45,24 +51,59 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById("new-directChat").addEventListener("submit", (event) => {
         event.preventDefault();
         const newPhoneNumber = document.getElementById("phoneNumber").value;
-
+        if(!newPhoneNumber) {
+        newDirectChatModal.style.display = 'none';
+        return
+        }
         checkPhoneNumber(newPhoneNumber)
             .then(isPhoneUsed => {
                 if (isPhoneUsed) {
                     if (newPhoneNumber !== phoneNumber) {
                         createNewConversation(newPhoneNumber);
                     } else {
-                        showErrorMessage("You can't speak with yourself :-)");
+                        newDirectChatModal.style.display = 'none';
+                        showErrorMessage("that is not funny; You can't speak with yourself :-)");
+                        return
                     }
                 } else {
+                    newDirectChatModal.style.display = 'none';
                     showErrorMessage("This phone number does not have an account.");
+                    return
                 }
             });
+            newDirectChatModal.style.display = 'none';
            setTimeout(function (){
             fetchConversations();
            },100);//after this time
 
     });
+
+    document.getElementById("new-groupChat").addEventListener("submit", (event) => {
+            event.preventDefault();
+            let groupName=document.getElementById("GroupName").value;
+            if(!groupName){
+                newGroupModal.style.display = 'none';
+                showErrorMessage("please Enter A name ");
+                return
+            }else{
+                fetch("http://localhost:8080/Conversation/addGroupchat",{
+                method: 'POST',
+                headers:{
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    name:groupName,
+                    firstUserPhone:phoneNumber
+                })
+                }).catch(error => console.error('Error:', error));
+            }
+            
+           newGroupModal.style.display = 'none';
+           setTimeout(function (){
+            fetchConversations();
+           },100);//after this time
+            });
 
     const checkPhoneNumber = (newPhoneNumber) => {
         return fetch(`${API_BASE_URL}/user/isPhoneUsed`, {
@@ -92,7 +133,6 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const showErrorMessage = (message) => {
-        newDirectChatModal.style.display = 'none';
         messageModal.style.display = "block";
         messageContent.innerText = message;
     };
@@ -253,17 +293,17 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const deleteConversation = () => {
-        alert("Delete conversation clicked");
+        alert("Delete conversation not Complete yet :-)");
         // Add your action to delete the conversation here
     };
 
     const addMember = () => {
-        alert("Add member clicked");
+        alert("Add member not Complete yet :-)");
         // Add your action to add a member here
     };
 
     const aboutConversation = () => {
-        alert("About conversation clicked");
+        alert("About conversation not Complete yet :-)");
         // Add your action for about conversation here
     };
 
