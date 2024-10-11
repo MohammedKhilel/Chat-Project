@@ -15,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/Conversation")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class ConversationController {
 
     private final GroupChatService groupChatService;
@@ -130,5 +131,12 @@ public class ConversationController {
                                          newMessage.ConversationId()+ " :-)");
         }
     }
+
+    @DeleteMapping("/DeleteConversation/{id}")
+    @Operation(summary = "Delete single conversation by conversation id")
+    public void DeleteConversation (@PathVariable("id") int conversationId){
+        conversationService.deleteConversation(conversationId);
+    }
+
 
 }

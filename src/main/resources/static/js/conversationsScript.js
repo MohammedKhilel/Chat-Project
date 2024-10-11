@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 })
                 }).catch(error => console.error('Error:', error));
             }
-            
+
            newGroupModal.style.display = 'none';
            setTimeout(function (){
             fetchConversations();
@@ -209,7 +209,6 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(renderMessages)
         .catch(error => console.error('Error fetching messages:', error));
     };
-
     // Render messages dynamically
     const renderMessages = (messages) => {
         messagesContainer.innerHTML = ''; // Clear previous messages
@@ -275,7 +274,7 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
             optionsIcon = document.querySelector(".options-icon");
             optionsIcon.addEventListener("click",showDropdown);
-            setupDropdownActions(isDirectChat);
+            setupDropdownActions(isDirectChat,conversation);
     };
 
     const showDropdown = () => {
@@ -283,18 +282,28 @@ document.addEventListener('DOMContentLoaded', () => {
         dropdown.style.display = "block";
     };
 
-    const setupDropdownActions = (isDirectChat) => {
+    const setupDropdownActions = (isDirectChat,conversation) => {
         const addMemberOption = document.getElementById("addMember");
         if (!isDirectChat) addMemberOption.style.display = "block";
 
-        document.getElementById("deleteConversation").addEventListener("click", deleteConversation);
-        document.getElementById("addMember").addEventListener("click", addMember);
-        document.getElementById("aboutConversation").addEventListener("click", aboutConversation);
+        document.getElementById("deleteConversation").addEventListener("click", () => deleteConversation(conversation.id));
+        document.getElementById("addMember").addEventListener("click",() =>  addMember());
+        document.getElementById("aboutConversation").addEventListener("click",() =>  aboutConversation());
     };
 
-    const deleteConversation = () => {
-        alert("Delete conversation not Complete yet :-)");
-        // Add your action to delete the conversation here
+    const deleteConversation = (conversationId) => {
+        fetch(`${API_BASE_URL}/Conversation/DeleteConversation/${conversationId}`,{
+            method:'Delete',
+            headers:{
+                'Authorization': `Bearer ${token}`
+            }
+        }).catch(error => console.error('deleteConversation Error: ', error));
+            activeConversation = null;
+            setTimeout(function (){
+            fetchConversations();
+            messagesHeader.innerHTML = ``;
+            messagesContainer.innerHTML = '';
+           },100);//after this time
     };
 
     const addMember = () => {

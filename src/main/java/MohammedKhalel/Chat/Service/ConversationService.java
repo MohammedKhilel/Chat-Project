@@ -28,6 +28,8 @@ public class ConversationService {
         conversationRepository.save(conversation);
     }
 
-
+    public void deleteConversation (int id){
+        conversationRepository.deleteById(id);
+    }
 
 }
