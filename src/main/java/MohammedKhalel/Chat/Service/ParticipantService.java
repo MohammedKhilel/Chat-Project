@@ -6,6 +6,8 @@ import MohammedKhalel.Chat.Repository.ParticipantRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ParticipantService {
@@ -16,6 +18,8 @@ public class ParticipantService {
         participantRepository.save(participant);
     }
 
-
+    public List<Participant> getGroupMembers(int groupId){
+        return participantRepository.findParticipantByGroupchatId(groupId);
+    }
 
 }

@@ -63,6 +63,11 @@ public class ConversationController {
     public Conversation getConversation (@PathVariable("id") int ConversationId){
        return conversationService.findById(ConversationId);
     }
+    @GetMapping("/getGroupMembers/{groupId}")
+    @Operation(summary = "get all Group chat members by group id")
+    public List<Participant> getGroupMembers(@PathVariable("groupId") int groupId){
+        return participantService.getGroupMembers(groupId);
+    }
 
     @GetMapping("/getConversationMessages/{id}")
     @Operation(summary = "get messages for a Conversation by it is id  ")

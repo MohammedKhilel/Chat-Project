@@ -9,11 +9,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const newGroupChatBtn = document.getElementById('newGroupChat');
     const messageContent = document.getElementById('messageContent');
     const newDirectChatModal = document.getElementById("newDirectChatModal");
+    const newMemberModal = document.getElementById("newMemberModal");
     const newGroupModal = document.getElementById("newGroupChatModal");
     const messageModal =document.getElementById("messageModal");
     const span = document.getElementById("close");
     const span2 = document.getElementById("close2");
     const span3 = document.getElementById("close3");
+    const span4 = document.getElementById("close4");
     let phoneNumber = localStorage.getItem('phoneNumber');
     let token = localStorage.getItem('token');
     let activeConversation = null;
@@ -29,6 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     span.onclick = () => newDirectChatModal.style.display = "none";
     span2.onclick = () => messageContent.style.display = "none";
     span3.onclick = () => newGroupModal.style.display = "none";
+    span4.onclick = () => newMemberModal.style.display = "none";
 
     // When the user clicks anywhere outside of the modal, close it
     window.onclick = function(event) {
@@ -41,7 +44,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (event.target == newGroupModal) {
             newGroupModal.style.display = "none";
         }
-
+        if (event.target == newMemberModal) {
+            newMemberModal.style.display = "none";
+        }
          if (dropdown && event.target != optionsIcon && !dropdown.contains(event.target)){
             dropdown.style.display = "none";
          }
@@ -53,6 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const newPhoneNumber = document.getElementById("phoneNumber").value;
         if(!newPhoneNumber) {
         newDirectChatModal.style.display = 'none';
+        showErrorMessage("please Enter A phone Number ");
         return
         }
         checkPhoneNumber(newPhoneNumber)
@@ -104,6 +110,44 @@ document.addEventListener('DOMContentLoaded', () => {
             fetchConversations();
            },100);//after this time
             });
+
+    document.getElementById("newMember").addEventListener("submit", (event) => {
+            event.preventDefault();
+            const memberPhoneNumber = document.getElementById("memberPhoneNumber").value;
+            if(!memberPhoneNumber) {
+            newMemberModal.style.display = 'none';
+            showErrorMessage("please Enter A phone Number ");
+            return
+            }
+            checkPhoneNumber(memberPhoneNumber)
+                .then(isPhoneUsed => {
+                    if (isPhoneUsed) {
+                        if (memberPhoneNumber !== phoneNumber) {
+                            fetch(`${API_BASE_URL}/Conversation/addGroupMember`,{
+                                method:'Post',
+                                headers:{
+                                    'Content-Type': 'application/json',
+                                    'Authorization': `Bearer ${token}`
+                                },
+                                body: JSON.stringify({
+                                        userPhone: memberPhoneNumber,
+                                        groupChatId: activeConversation.id
+                                })
+                            }).catch(error => console.error('add Member Error: ', error));
+                        } else {
+                            newMemberModal.style.display = 'none';
+                            showErrorMessage("that is not funny; You can't add yourself to your own group :-)");
+                            return
+                        }
+                    } else {
+                        newMemberModal.style.display = 'none';
+                        showErrorMessage("This phone number does not have an account.");
+                        return
+                    }
+                });
+                newMemberModal.style.display = 'none';
+
+        });
 
     const checkPhoneNumber = (newPhoneNumber) => {
         return fetch(`${API_BASE_URL}/user/isPhoneUsed`, {
@@ -274,7 +318,7 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
             optionsIcon = document.querySelector(".options-icon");
             optionsIcon.addEventListener("click",showDropdown);
-            setupDropdownActions(isDirectChat,conversation);
+            setupDropdownActions(isDirectChat);
     };
 
     const showDropdown = () => {
@@ -282,17 +326,19 @@ document.addEventListener('DOMContentLoaded', () => {
         dropdown.style.display = "block";
     };
 
-    const setupDropdownActions = (isDirectChat,conversation) => {
+    const setupDropdownActions = (isDirectChat) => {
         const addMemberOption = document.getElementById("addMember");
         if (!isDirectChat) addMemberOption.style.display = "block";
 
-        document.getElementById("deleteConversation").addEventListener("click", () => deleteConversation(conversation.id));
+        document.getElementById("deleteConversation").addEventListener("click", () => deleteConversation());
         document.getElementById("addMember").addEventListener("click",() =>  addMember());
         document.getElementById("aboutConversation").addEventListener("click",() =>  aboutConversation());
     };
 
-    const deleteConversation = (conversationId) => {
-        fetch(`${API_BASE_URL}/Conversation/DeleteConversation/${conversationId}`,{
+    const getUserData
+
+    const deleteConversation = () => {
+        fetch(`${API_BASE_URL}/Conversation/DeleteConversation/${activeConversation.id}`,{
             method:'Delete',
             headers:{
                 'Authorization': `Bearer ${token}`
@@ -307,11 +353,14 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const addMember = () => {
-        alert("Add member not Complete yet :-)");
-        // Add your action to add a member here
+        console.log(activeConversation);
+        //if(phoneNumber==activeConversation.)
+        newMemberModal.style.display = "block";
+
     };
 
     const aboutConversation = () => {
+
         alert("About conversation not Complete yet :-)");
         // Add your action for about conversation here
     };
