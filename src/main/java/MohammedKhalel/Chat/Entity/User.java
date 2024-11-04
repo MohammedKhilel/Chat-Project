@@ -28,6 +28,7 @@ public class User implements UserDetails {
     private String name;
     private String phoneNumber;
     private String personalPhotoUrl;
+    @JsonIgnore
     private String Password;
     private String status;
 

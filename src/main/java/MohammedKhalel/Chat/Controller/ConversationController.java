@@ -28,7 +28,7 @@ public class ConversationController {
     }
     public record DirectChatRequest(String userPhone1, String userPhone2) {
     }
-    public record AddMemberRequest(String userPhone, int groupChatId) {
+    public record MemberRequest(String userPhone, int groupChatId) {
     }
     public record sendMessageRequest(String userPhone, int ConversationId,String content,String status,
                                      String attachmentUrl,String attachmentType) {
@@ -69,6 +69,15 @@ public class ConversationController {
         return participantService.getGroupMembers(groupId);
     }
 
+    @PostMapping("/getOneParticipant")
+    @Operation(summary = "get one participant by User Id and group chat id")
+    public Participant getOneParticipant(@RequestBody MemberRequest memberRequest){
+        ParticipantKey theKey = new ParticipantKey(userService.findUserByPhoneNumber(memberRequest.userPhone())
+                                                  ,groupChatService.getGroupchatById(memberRequest.groupChatId()));
+        return participantService.getOneParticipant(theKey);
+    }
+
+
     @GetMapping("/getConversationMessages/{id}")
     @Operation(summary = "get messages for a Conversation by it is id  ")
     public List<Message> getConversationJoinFetch (@PathVariable("id") int ConversationId){
@@ -107,7 +116,7 @@ public class ConversationController {
 
     @PostMapping("/addGroupMember")
     @Operation(summary = "add new member for a specific group chat")
-    public void addGroupMember (@RequestBody AddMemberRequest memberRequest){
+    public void addGroupMember (@RequestBody MemberRequest memberRequest){
 
         User theUser = userService.findUserByPhoneNumber(memberRequest.userPhone());
         Groupchat theGroupchat = groupChatService.getGroupchatById(memberRequest.groupChatId());

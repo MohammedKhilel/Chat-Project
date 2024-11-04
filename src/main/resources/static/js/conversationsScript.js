@@ -174,6 +174,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }).catch(error => console.error('Error:', error));
 
         newDirectChatModal.style.display = "none";
+        setTimeout(function (){
+                    fetchConversations();
+                    messagesHeader.innerHTML = ``;
+                    messagesContainer.innerHTML = '';
+                   },100);//after this time
+
     };
 
     const showErrorMessage = (message) => {
@@ -324,6 +330,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const showDropdown = () => {
         dropdown = document.querySelector(".dropdown");
         dropdown.style.display = "block";
+
     };
 
     const setupDropdownActions = (isDirectChat) => {
@@ -335,9 +342,46 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById("aboutConversation").addEventListener("click",() =>  aboutConversation());
     };
 
-    const getUserData
+    const getMembersData =() =>{
+        fetch(`${API_BASE_URL}/Conversation/getGroupMembers/${activeConversation.id}`,{
+            method:'Get',
+            headers:{
+                'Authorization': `Bearer ${token}`
+            }
+        }).then(response => response.json())
+          .then(console.log)
+          .catch(error => console.error('getMembersData Error: ', error));
+
+    }
+
+    const getUserDate = () => {
+        return fetch(`${API_BASE_URL}/Conversation/getOneParticipant`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                userPhone: phoneNumber,
+                groupChatId: activeConversation.id
+            })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json(); // Return the parsed JSON data
+        })
+        .catch(error => {
+            console.error('getUserDate Error:', error);
+            return null; // Return null or handle error accordingly
+        });
+    };
+
 
     const deleteConversation = () => {
+    dropdown.style.display = "none";
+
         fetch(`${API_BASE_URL}/Conversation/DeleteConversation/${activeConversation.id}`,{
             method:'Delete',
             headers:{
@@ -353,9 +397,18 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const addMember = () => {
-        console.log(activeConversation);
-        //if(phoneNumber==activeConversation.)
-        newMemberModal.style.display = "block";
+
+        dropdown.style.display = "none";
+        getUserDate().then(userData => {
+            if(userData['role']=='Admin'){
+                 newMemberModal.style.display = "block";
+            }else{
+                showErrorMessage("you must be Admin to add members");
+            }
+        });
+
+        //if(phoneNumber==activeConversation.)   ///  not any one can add members
+
 
     };
 

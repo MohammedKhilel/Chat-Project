@@ -1,6 +1,7 @@
 package MohammedKhalel.Chat.Service;
 
 
+import MohammedKhalel.Chat.Compositekeys.ParticipantKey;
 import MohammedKhalel.Chat.Entity.Participant;
 import MohammedKhalel.Chat.Repository.ParticipantRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,11 @@ public class ParticipantService {
 
     public List<Participant> getGroupMembers(int groupId){
         return participantRepository.findParticipantByGroupchatId(groupId);
+    }
+
+    public Participant getOneParticipant (ParticipantKey theKey){
+
+        return participantRepository.findById(theKey).orElseThrow();
     }
 
 }
