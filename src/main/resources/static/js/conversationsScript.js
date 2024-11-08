@@ -406,10 +406,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 showErrorMessage("you must be Admin to add members");
             }
         });
-
-        //if(phoneNumber==activeConversation.)   ///  not any one can add members
-
-
     };
 
     const aboutConversation = () => {
